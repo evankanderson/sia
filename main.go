@@ -10,6 +10,7 @@ import (
 	"os"
 	"strings"
 
+	"github.com/hkwi/h2c"
 	pb "github.com/evankanderson/sia/doer"
 	"google.golang.org/grpc"
 )
@@ -51,7 +52,7 @@ func (s *doerServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	w.WriteHeader(200)
-	log.Printf("HTTP %s: %s\n", r.Method, in)
+	log.Printf("HTTP/%d %s: %s\n", r.ProtoMajor, r.Method, in)
 	fmt.Fprintf(w, "Did: %s\n", in)
 }
 
@@ -60,24 +61,29 @@ func newServer() *doerServer {
 	return s
 }
 
+type grpcAdapter struct {
+	grpcServer http.Handler
+}
+
+func (g grpcAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	log.Printf("Got %s on %d with %s", r.Method, r.ProtoMajor, r.Header.Get("Content-Type"))
+	if r.ProtoMajor == 2 && strings.HasPrefix(
+		r.Header.Get("Content-Type"), "application/grpc") {
+		g.grpcServer.ServeHTTP(w, r)
+	} else {
+		http.DefaultServeMux.ServeHTTP(w, r)
+	}
+}
+
 func main() {
-	addr := fmt.Sprintf("localhost:%s", os.Getenv("PORT"))
-	fmt.Printf("Listening on %s", addr)
+	addr := fmt.Sprintf(":%s", os.Getenv("PORT"))
+	fmt.Printf("Listening on %s\n", addr)
 	grpcServer := grpc.NewServer()
 	doer := newServer()
 	pb.RegisterDoerServer(grpcServer, doer)
-
-	h2g := http.NewServeMux()
-	h2g.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		if r.ProtoMajor == 2 && strings.HasPrefix(
-			r.Header.Get("Content-Type"), "application/grpc") {
-			grpcServer.ServeHTTP(w, r)
-		} else {
-			http.DefaultServeMux.ServeHTTP(w, r)
-		}
-	})
-
 	http.Handle("/", doer)
 
-	log.Fatal(http.ListenAndServe(addr, h2g))
+	h2g := grpcAdapter{grpcServer: grpcServer}
+	noTls := h2c.Server{Handler: h2g}
+	log.Fatal(http.ListenAndServe(addr, noTls))
 }
