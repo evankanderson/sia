@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package doer;
+
+service Doer {
+  rpc DoIt(Command) returns (Response) {}
+
+  rpc KeepDoing(stream Command) returns (stream Response) {}
+}
+
+message Command {
+  string thing = 1;
+}
+
+message Response {
+  string words = 1;
+}
