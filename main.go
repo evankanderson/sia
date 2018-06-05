@@ -19,6 +19,7 @@ type doerServer struct {
 
 func (s *doerServer) DoIt(ctx context.Context, c *pb.Command) (*pb.Response, error) {
 	resp := fmt.Sprintf("Did: %s", c.Thing)
+	log.Printf("RPC: %s", c.Thing)
 	return &pb.Response{Words: resp}, nil
 }
 
@@ -31,6 +32,8 @@ func (s *doerServer) KeepDoing(stream pb.Doer_KeepDoingServer) error {
 		if err != nil {
 			return err
 		}
+
+		log.Printf("STREAM: %s", in)
 
 		words := fmt.Sprintf("Did: %s", in.Thing)
 		resp := &pb.Response{Words: words}
@@ -48,6 +51,7 @@ func (s *doerServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	w.WriteHeader(200)
+	log.Printf("HTTP %s: %s\n", r.Method, in)
 	fmt.Fprintf(w, "Did: %s\n", in)
 }
 
