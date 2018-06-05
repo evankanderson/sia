@@ -10,8 +10,8 @@ import (
 	"os"
 	"strings"
 
-	"github.com/hkwi/h2c"
 	pb "github.com/evankanderson/sia/doer"
+	"github.com/hkwi/h2c"
 	"google.golang.org/grpc"
 )
 
