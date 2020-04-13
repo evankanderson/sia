@@ -53,6 +53,7 @@ func (s *doerServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 	w.WriteHeader(200)
 	log.Printf("HTTP/%d %s: %s\n", r.ProtoMajor, r.Method, in)
+	fmt.Fprintf(w, "You asked for %q\n\n", r.URL)
 	fmt.Fprintf(w, "Did: %s\n", in)
 }
 
