@@ -76,7 +76,11 @@ func (g grpcAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	addr := fmt.Sprintf(":%s", os.Getenv("PORT"))
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+	}
+	addr := fmt.Sprintf(":%s", port)
 	fmt.Printf("Listening on %s\n", addr)
 	grpcServer := grpc.NewServer()
 	doer := newServer()
