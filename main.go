@@ -20,7 +20,7 @@ type doerServer struct {
 
 func (s *doerServer) DoIt(ctx context.Context, c *pb.Command) (*pb.Response, error) {
 	resp := fmt.Sprintf("Did: %s", c.Thing)
-	log.Printf("RPC: %s", c.Thing)
+	log.Printf("RPC: %s\n DONE!", c.Thing)
 	return &pb.Response{Words: resp}, nil
 }
 
