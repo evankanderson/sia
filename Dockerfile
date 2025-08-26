@@ -1,5 +1,5 @@
 # build stage
-FROM golang:1.24 AS build-env
+FROM golang:1.25 AS build-env
 RUN mkdir -p /go/src/github.com/evankanderson/sia
 WORKDIR /go/src/github.com/evankanderson/sia
 ADD . .
