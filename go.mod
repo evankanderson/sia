@@ -5,13 +5,13 @@ go 1.24.0
 require (
 	github.com/golang/protobuf v1.5.4
 	github.com/hkwi/h2c v0.0.0-20180807060133-3511cd63f456
-	golang.org/x/net v0.46.0
+	golang.org/x/net v0.47.0
 	google.golang.org/grpc v1.76.0
 )
 
 require (
-	golang.org/x/sys v0.37.0 // indirect
-	golang.org/x/text v0.30.0 // indirect
+	golang.org/x/sys v0.38.0 // indirect
+	golang.org/x/text v0.31.0 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20250804133106-a7a43d27e69b // indirect
 	google.golang.org/protobuf v1.36.6 // indirect
 )
