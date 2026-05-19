@@ -6,7 +6,7 @@ require (
 	github.com/golang/protobuf v1.5.4
 	github.com/hkwi/h2c v0.0.0-20180807060133-3511cd63f456
 	golang.org/x/net v0.54.0
-	google.golang.org/grpc v1.81.0
+	google.golang.org/grpc v1.81.1
 )
 
 require (
