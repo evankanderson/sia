@@ -1,13 +1,6 @@
 version: 2
 updates:
-- package-ecosystem: "docker"
-  directories:
-  - /
-  schedule:
-    interval: "weekly"  # .schedule_interval
-  open-pull-requests-limit: 10
-
-- package-ecosystem: "gomod"
+- package-ecosystem: "github-actions"
   directories:
   - /
   schedule:
